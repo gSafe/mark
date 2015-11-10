@@ -1,0 +1,142 @@
+<!--
+  #%L
+  mark-dropwizard
+  %%
+  Copyright (C) 2013 - 2015 gSafe
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #L%
+  -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>API - mark</title>
+
+    <link href="/docs/styles/bootstrap-3.1.1/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/docs/styles/doc.css" rel="stylesheet"></link>
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-md-2">
+        <a href="/docs/index.html"><img id="novapost" src="/docs/images/novapost_logo.png" width="165" /></a>
+    </div>
+    <header class="col-md-10">
+        <h1>
+            DOCUMENT WEB SERVICE
+        </h1>
+    </header>
+</div>
+
+<div class="row">
+    <!-- table_of_content -->
+    <div class="col-xs-12 col-md-2">
+        <div id="table_of_content">
+            <h2>Table of content</h2>
+            <h3>Documents</h3>
+            <ul>
+                <li><a href="#info">Access info service</a></li>
+                <li><a href="#pdf-watermark">Generate PDF documents stamped with a watermark and an info block</a></li>
+                <li><a href="#pdf-datamatrix">Generate PDF documents stamped with a 2D datamatrix barcode</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-10 method">
+        <h2 id="info">Access info service</h2>
+        <div class="row">
+            <div class="col-xs-12 url"><div class="get">GET</div><div class="path">/documents/info</div></div>
+            <div class="col-xs-12 col-md-6">
+                <h3>Parameters:</h3>
+                <p></p>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3>Response: </h3>
+                <ul>
+                    <li><strong>200</strong>: Retrieved info</li>
+                    <li><strong>400</strong>: Bad Request</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <pre class="col-xs-12">curl http://localhost:8080/documents/info</pre>
+        </div>
+    </div>
+    
+    
+    <div class="col-xs-12 col-md-10 col-md-offset-2 method">
+        <h2 id="pdf-watermark">Generate PDF documents stamped with watermark and info block</h2>
+        <div class="row">
+            <div class="col-xs-12 url"><div class="post">POST</div><div class="path">/documents/watermark</div></div>
+            <div class="col-xs-12 col-md-6">
+                <h3>Parameters:</h3>
+                <em>Parameters are passed through content-type multipart/form-data and are put inside the request body.</em>
+                <dl>
+                    <dt class="parameters">file</dt><dd>The file to stamp</dd>
+                    <dt class="parameters">watermark (optional)</dt><dd>The watermark label to stamp on the document</dd>
+                    <dt class="parameters">info (optional)</dt><dd>The information block to stamp on the document</dd>
+                </dl>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3>Response: </h3>
+                <ul>
+                    <li><strong>200</strong>: Retrieved a stamped document</li>
+                    <li><strong>400</strong>: Bad Request : file missing</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            Stamp a PDF document with a watermark:
+            <pre class="col-xs-12">curl -X POST -H'Content-type:multipart/form-data' -F"file=@/home/pdf-sample.pdf;type=application/pdf" http://mark.serenity2.novapost.net:8100/documents/watermark -F"watermark=DUPLICATA" > watermark.pdf</pre>
+        </div>
+        <div class="row">
+            Stamp a PDF document with an info block:
+            <pre class="col-xs-12">curl -X POST -H'Content-type:multipart/form-data' -F"file=@/home/pdf-sample.pdf;type=application/pdf" http://mark.serenity2.novapost.net:8100/documents/watermark -F"info=créé par Novapost" > info.pdf</pre>
+        </div>
+        <div class="row">
+            Stamp a PDF document with a watermark and an info block:
+            <pre class="col-xs-12">curl -X POST -H'Content-type:multipart/form-data' -F"file=@/home/pdf-sample.pdf;type=application/pdf" http://mark.serenity2.novapost.net:8100/documents/watermark -F"watermark=DUPLICATA" -F"info=créé par Novapost" > watermark.pdf</pre>
+        </div>
+    </div>
+    
+    <div class="col-xs-12 col-md-10 col-md-offset-2 method">
+        <h2 id="pdf-datamatrix">Generate PDF documents stamped with a 2D datamatrix barcode</h2>
+        <div class="row">
+            <div class="col-xs-12 url"><div class="post">POST</div><div class="path">/documents/datamatrix</div></div>
+            <div class="col-xs-12 col-md-6">
+                <h3>Parameters:</h3>
+                <em>Parameters are passed through content-type multipart/form-data and are put inside the request body.</em>
+                <dl>
+                    <dt class="parameters">file</dt><dd>The file to stamp</dd>
+                    <dt class="parameters">barcodeData (optional)</dt><dd>The data to stamp on the document</dd>
+                    <dt class="parameters">x (optional)</dt><dd>Coordinates of the datamatrix on the x-axis</dd>
+                    <dt class="parameters">y (optional)</dt><dd>Coordinates of the datamatrix on the y-axis</dd>
+                </dl>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <h3>Response: </h3>
+                <ul>
+                    <li><strong>200</strong>: Retrieved a stamped document</li>
+                    <li><strong>400</strong>: Bad Request : file missing</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <pre class="col-xs-12">curl -X POST -H'Content-type:multipart/form-data' -F"file=@/home/pdf-sample.pdf;type=application/pdf" http://mark.serenity2.novapost.net:8100/documents/datamatrix -F"barcodeData=Sample text for test" -F"x=550" -F"y=800" > datamatrix.pdf</pre>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

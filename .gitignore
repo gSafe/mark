@@ -1,0 +1,14 @@
+.classpath
+.project
+.settings
+target
+bin
+!**/express/bin
+.vagrant
+
+.idea/*
+*.iml
+.svn
+.log
+.swp
+*~
